@@ -9,6 +9,6 @@ always @ (posedge clk)
 	phase_acc <= phase_acc + m;
 
 assign out = phase_acc[31:24];
-assign m = 3579139;	// tuning word for a frequency of 10 kHz (m = 2^32 * 10 kHz / 12 MHz)
+assign m = 157482;	// tuning word for a frequency of 440 Hz (m = 2^32 * 440 Hz / 12 MHz)
 
 endmodule

@@ -3,7 +3,7 @@ module test;
 	initial begin
 		$dumpfile("test.vcd");
 		$dumpvars(0, test);
-		# 200000 $finish;	// 200 000 ns = 2 periods of the 10kHz signal
+		# 4545454 $finish;	// 4 545 454 ns = 2 periods of the 440 Hz signal
 	end
 
 	reg clk=0;
