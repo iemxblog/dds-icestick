@@ -1,7 +1,7 @@
 all: test.vcd
 
-dds: dds.v dds_tb.v
-	iverilog -o dds dds.v dds_tb.v
+dds: dds.v sine_lut.v dds_tb.v
+	iverilog -o dds dds.v sine_lut.v dds_tb.v
 
 test.vcd: dds
 	vvp dds
