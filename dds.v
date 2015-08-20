@@ -1,7 +1,7 @@
-module dds(clk, out);
-input clk;
-output [7:0] out;
-wire [7:0] out;
+module dds(
+	input wire clk, 
+	output wire [7:0] out
+);
 reg [31:0] phase_acc=0;
 wire [31:0] m;
 wire [7:0] phase;
