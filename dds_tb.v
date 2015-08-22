@@ -1,8 +1,8 @@
 `timescale 1ns/1ps	// reference time = 1ns, precision value = 1ps 
-module test;
+module dds_tb;
 	initial begin
-		$dumpfile("test.vcd");
-		$dumpvars(0, test);
+		$dumpfile("dds.vcd");
+		$dumpvars(0, dds_tb);
 		# 13636363 $finish;	// 13 636 363 ns = 6 periods of the 440 Hz signal
 	end
 
