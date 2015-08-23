@@ -6,15 +6,15 @@ module communication(
 	input wire received,
 	input wire [7:0] rx_byte,
 
-	output reg en,
+	output reg en=0,
 	output wire [31:0] m,
-	output reg set	
+	output reg set=0	
 
 );
 
 reg [7:0] state=`COMMAND;
 reg [7:0] command=0;
-reg [7:0] m0, m1, m2, m3;
+reg [7:0] m0=0, m1=0, m2=0, m3=0;
 
 assign m = {m3, m2, m1, m0};
 
