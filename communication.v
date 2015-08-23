@@ -20,6 +20,8 @@ reg gen_pulse=0;
 
 assign m = {m3, m2, m1, m0};
 
+
+// state machine to receive data from the UART
 always @ (posedge received)
 begin
 	case(state)
@@ -57,6 +59,9 @@ begin
 	endcase
 end
 
+// pulse generator for the 'set' output
+// to generate a pulse, the 'gen_pulse' reg is set to 1
+// and the following code generates the pulse during one clock cycle
 always @ (posedge clk)
 begin
 	if (gen_pulse==1)
@@ -69,5 +74,7 @@ end
 always @ (negedge clk) begin
 	set=0;
 end
+
+// end of pulse generator
 
 endmodule
