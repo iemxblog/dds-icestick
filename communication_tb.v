@@ -60,6 +60,6 @@ module communication_tb;
 		#1 received = 0;
 	end
 
-	communication com(.transmit(transmit), .tx_byte(tx_byte), .received(received), .rx_byte(rx_byte), .en(en), .m(m), .set(set));
+	communication com(.clk(clk), .transmit(transmit), .tx_byte(tx_byte), .received(received), .rx_byte(rx_byte), .en(en), .m(m), .set(set));
 
 endmodule

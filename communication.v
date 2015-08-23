@@ -1,6 +1,7 @@
 `include "commands.vh"
 
 module communication(
+	input wire clk,
 	output reg transmit,
 	output reg [7:0] tx_byte,
 	input wire received,
@@ -15,6 +16,7 @@ module communication(
 reg [7:0] state=`COMMAND;
 reg [7:0] command=0;
 reg [7:0] m0=0, m1=0, m2=0, m3=0;
+reg gen_pulse=0;
 
 assign m = {m3, m2, m1, m0};
 
@@ -22,7 +24,7 @@ always @ (posedge received)
 begin
 	case(state)
 		`COMMAND: begin
-				command <= rx_byte;
+				command = rx_byte;
 				case(command)
 					`BYTE0: state = `DATA;
 					`BYTE1: state = `DATA;
@@ -37,8 +39,8 @@ begin
 							state = `COMMAND;
 						end
 					`SET: 	begin
-							set<=1;
-							set<=0;
+							gen_pulse=1;
+							state = `COMMAND;
 						end
 					default: state = `COMMAND;
 				endcase
@@ -53,6 +55,19 @@ begin
 				state = `COMMAND;
 			end
 	endcase
+end
+
+always @ (posedge clk)
+begin
+	if (gen_pulse==1)
+	begin
+		gen_pulse=0;
+		set=1;
+	end
+end
+
+always @ (negedge clk) begin
+	set=0;
 end
 
 endmodule

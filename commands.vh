@@ -9,6 +9,6 @@
 `define BYTE3 3
 `define ENABLE 4
 `define DISABLE 5
-`define SET 4
+`define SET 6
 
 
