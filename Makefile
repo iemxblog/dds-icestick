@@ -1,4 +1,4 @@
-all: dds.vcd communication.vcd
+all: dds.vcd communication.vcd generator
 
 dds: dds.v sine_lut.v dds_tb.v
 	iverilog -o dds dds.v sine_lut.v dds_tb.v
@@ -11,6 +11,9 @@ communication: communication.v communication_tb.v commands.vh
 
 communication.vcd: communication
 	vvp communication
+
+generator: generator.v communication.v commands.vh dds.v sine_lut.v uart.v
+	iverilog -o generator generator.v communication.v dds.v sine_lut.v uart.v
 
 sim_dds: dds.vcd
 	gtkwave dds.vcd
