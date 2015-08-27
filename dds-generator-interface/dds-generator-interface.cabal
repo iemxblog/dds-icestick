@@ -5,8 +5,8 @@ name:                dds-generator-interface
 version:             0.1.0.0
 synopsis:            Interface for an FPGA-based DDS generator
 -- description:         
-homepage:            https://github.io/iemxblog/dds-icestick/
--- license:             
+homepage:            https://github.com/iemxblog/dds-icestick/
+license:             GPL-2
 license-file:        LICENSE
 author:              iemxblog
 maintainer:          iemxblog@gmail.com
