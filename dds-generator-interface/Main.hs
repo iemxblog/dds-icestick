@@ -14,9 +14,12 @@ module Main (
 import Data.Word
 import Data.Bits
 import Data.List
+import Control.Monad
+import System.IO
 
 data Command = Byte Int Word8 | Enable | Disable | Set deriving (Eq, Show)
 
+-- | Translates 'Command' to binary, in order to send it over the serial port.
 commandToWord8 :: Command -> [Word8]
 commandToWord8 (Byte i w) = [fromIntegral i, w]
 commandToWord8 Enable = [4]
@@ -52,8 +55,10 @@ frequency :: (Integral i , Fractional f) => i	-- ^ fClk : The clock of the FPGA 
 					-> f	-- ^ The resulting frequency
 frequency fClk twBits m =  fromIntegral (m * fClk) / 2^twBits
 
-genCommand :: RealFrac f => f -> [Command]
-genCommand f = zipWith Byte [0..] (make4 (splitIntegral . tuningWord fClk twBits $ f))
+-- | Generates a command to send the tuning word.
+genCommandTW :: RealFrac f => 	f 		-- ^ f : Desired frequenct
+				-> [Command]	-- ^ Resulting command
+genCommandTW f = zipWith Byte [0..] (make4 (splitIntegral . tuningWord fClk twBits $ f))
 	where 
 		make4 = take 4 . (++ repeat 0)
 		fClk = 12000000
@@ -62,4 +67,13 @@ genCommand f = zipWith Byte [0..] (make4 (splitIntegral . tuningWord fClk twBits
 
 
 main :: IO ()
-main = putStrLn "Hello, World!"
+main = forever $ do
+	putStr "> "
+	hFlush stdout
+	s <- getLine
+	case s of
+		"enable" -> putStrLn "Enable !!!"
+		"disable" -> putStrLn "Disable !!!"
+		"set" -> putStrLn "Set !!!"
+		"f" -> putStrLn "f !!!"
+		_ -> putStrLn "Invalid command"
