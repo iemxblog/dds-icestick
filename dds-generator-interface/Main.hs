@@ -72,8 +72,13 @@ main = forever $ do
 	hFlush stdout
 	s <- getLine
 	case s of
-		"enable" -> putStrLn "Enable !!!"
-		"disable" -> putStrLn "Disable !!!"
-		"set" -> putStrLn "Set !!!"
-		"f" -> putStrLn "f !!!"
+		"enable" -> print $ commandsToWord8 [Enable]
+		"disable" -> print $ commandsToWord8 [Disable]
+		"set" -> print $ commandsToWord8 [Set]
+		"f" -> do
+				putStr "f="
+				hFlush stdout
+				sf <- getLine
+				let f = read sf 
+				print $ commandsToWord8 (genCommandTW f)
 		_ -> putStrLn "Invalid command"
