@@ -16,8 +16,12 @@ import Data.Bits
 import Data.List
 import Control.Monad
 import System.IO
+import System.Hardware.Serialport
+import qualified Data.ByteString as B
 
 data Command = Byte Int Word8 | Enable | Disable | Set deriving (Eq, Show)
+
+ack = 7
 
 -- | Translates 'Command' to binary, in order to send it over the serial port.
 commandToWord8 :: Command -> [Word8]
@@ -55,30 +59,51 @@ frequency :: (Integral i , Fractional f) => i	-- ^ fClk : The clock of the FPGA 
 					-> f	-- ^ The resulting frequency
 frequency fClk twBits m =  fromIntegral (m * fClk) / 2^twBits
 
--- | Generates a command to send the tuning word.
-genCommandTW :: RealFrac f => 	f 		-- ^ f : Desired frequenct
+-- | Generates a list of commands to send the tuning word.
+genCommandsTW :: RealFrac f => 	f 		-- ^ f : Desired frequenct
 				-> [Command]	-- ^ Resulting command
-genCommandTW f = zipWith Byte [0..] (make4 (splitIntegral . tuningWord fClk twBits $ f))
+genCommandsTW f = zipWith Byte [0..] (make4 (splitIntegral . tuningWord fClk twBits $ f))
 	where 
 		make4 = take 4 . (++ repeat 0)
 		fClk = 12000000
 		twBits = 32 :: Int
 
+sendCommand :: SerialPort -> Command -> IO ()
+sendCommand serial c = do
+	send serial $ B.pack (commandToWord8 c)
+	putStr "o"
+	hFlush stdout
+	b <- recv serial 1
+	case B.unpack b of
+		[ack] -> putStr "." >> hFlush stdout
+		_ -> putStr "!" >> hFlush stdout
 
-
-main :: IO ()
-main = forever $ do
+sendCommands :: SerialPort -> [Command] -> IO ()
+sendCommands serial cs = (sequence_ . map (sendCommand serial)) cs >> putStrLn ""
+		
+--loop :: SerialPort -> IO ()
+loop serial = do
 	putStr "> "
 	hFlush stdout
 	s <- getLine
 	case s of
-		"enable" -> print $ commandsToWord8 [Enable]
-		"disable" -> print $ commandsToWord8 [Disable]
-		"set" -> print $ commandsToWord8 [Set]
+		"enable" -> sendCommands serial [Enable] >> loop serial
+		"disable" -> sendCommands serial [Disable] >> loop serial
+		"set" -> sendCommands serial [Set] >> loop serial
 		"f" -> do
 				putStr "f="
 				hFlush stdout
 				sf <- getLine
 				let f = read sf 
-				print $ commandsToWord8 (genCommandTW f)
-		_ -> putStrLn "Invalid command"
+				sendCommands serial $ genCommandsTW f
+				loop serial
+		"help" -> putStrLn "Available commands : enable, disable, set, f, help, exit" >> loop serial
+		"exit" -> return ()
+		_ -> putStrLn "Invalid command" >> loop serial
+
+main :: IO ()
+main = do
+	putStrLn "Opening serial port..."
+	withSerial "/dev/ttyACM0" defaultSerialSettings { commSpeed = CS115200 } loop
+	putStrLn "Serial port closed."
+
