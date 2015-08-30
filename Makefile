@@ -6,14 +6,14 @@ dds: dds.v sine_lut.v dds_tb.v
 dds.vcd: dds
 	vvp dds
 
-communication: communication.v communication_tb.v commands.vh
-	iverilog -o communication communication.v communication_tb.v
+communication: communication.v communication_tb.v commands.vh pulse_gen.v
+	iverilog -o communication communication.v communication_tb.v pulse_gen.v
 
 communication.vcd: communication
 	vvp communication
 
-generator: generator.v communication.v commands.vh dds.v sine_lut.v uart.v
-	iverilog -o generator generator.v communication.v dds.v sine_lut.v uart.v
+generator: generator.v communication.v commands.vh dds.v sine_lut.v uart.v pulse_gen.v
+	iverilog -o generator generator.v communication.v dds.v sine_lut.v uart.v pulse_gen.v
 
 sim_dds: dds.vcd
 	gtkwave dds.vcd
