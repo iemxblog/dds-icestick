@@ -1,8 +1,3 @@
-// states
-`define COMMAND 0
-`define DATA 1
-
-// commands
 `define BYTE0 0
 `define BYTE1 1
 `define BYTE2 2
@@ -11,4 +6,4 @@
 `define DISABLE 5
 `define SET 6
 
-
+`define ACK 7
