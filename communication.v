@@ -2,8 +2,8 @@
 
 module communication(
 	input wire clk,
-	output reg transmit,
-	output reg [7:0] tx_byte,
+	output reg transmit=0,
+	output reg [7:0] tx_byte=0,
 	input wire received,
 	input wire [7:0] rx_byte,
 
