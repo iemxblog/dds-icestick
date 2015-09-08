@@ -9,8 +9,8 @@ module communication(
 
 	output reg en=0,
 	output wire [31:0] m,
-	output reg set=0
-
+	output reg set=0,
+	output reg error=0
 );
 
 reg [7:0] state=0;
@@ -89,8 +89,11 @@ begin
 		end
 		8: begin // error state
 			state=0;
+			error=1;
 		end
 	endcase
 end
+
+always @ (posedge received) error=0;
 
 endmodule

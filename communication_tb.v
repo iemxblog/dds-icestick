@@ -23,6 +23,7 @@ module communication_tb;
 	wire en;
 	wire [31:0] m;
 	wire set;
+	wire error;
 
 	reg [31:0] m2=157482; // value of m to send
 
@@ -62,8 +63,16 @@ module communication_tb;
 		#`PERIOD10 rx_byte = `ENABLE;
 		#`PERIOD received = 1;
 		#`PERIOD received = 0;
+		
+		#`PERIOD10 rx_byte = 0; // generate an error
+		#`PERIOD received = 1;
+		#`PERIOD received = 0;
+
+		#`PERIOD10 rx_byte = `SET; // clean the error by sending a correct command
+		#`PERIOD received = 1;
+		#`PERIOD received = 0;
 	end
 
-	communication com(.clk(clk), .transmit(transmit), .tx_byte(tx_byte), .received(received), .rx_byte(rx_byte), .en(en), .m(m), .set(set));
+	communication com(.clk(clk), .transmit(transmit), .tx_byte(tx_byte), .received(received), .rx_byte(rx_byte), .en(en), .m(m), .set(set), .error(error));
 
 endmodule

@@ -23,13 +23,12 @@ assign led5 = is_transmitting;
 assign led4 = is_receiving;
 assign led3 = 0;
 assign led2=0;
-assign led1=0;
 
 wire en;
 wire [31:0] m;
 wire set;
 
-communication com(.clk(clk), .transmit(transmit), .tx_byte(tx_byte), .received(received), .rx_byte(rx_byte), .en(en), .m(m), .set(set));
+communication com(.clk(clk), .transmit(transmit), .tx_byte(tx_byte), .received(received), .rx_byte(rx_byte), .en(en), .m(m), .set(set), .error(led1));
 
 dds dds(.clk(clk), .en(en), .m(m), .set(set), .out(out));
 
