@@ -1,9 +1,9 @@
-`define BYTE0 0
-`define BYTE1 1
-`define BYTE2 2
-`define BYTE3 3
-`define ENABLE 4
-`define DISABLE 5
-`define SET 6
+`define BYTE0 48
+`define BYTE1 49 
+`define BYTE2 50 
+`define BYTE3 51
+`define ENABLE 101
+`define DISABLE 100
+`define SET 115
 
-`define ACK 7
+`define ACK 97

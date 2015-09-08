@@ -21,14 +21,14 @@ import qualified Data.ByteString as B
 
 data Command = Byte Int Word8 | Enable | Disable | Set deriving (Eq, Show)
 
-ack = 7
+ack = 97
 
 -- | Translates 'Command' to binary, in order to send it over the serial port.
 commandToWord8 :: Command -> [Word8]
-commandToWord8 (Byte i w) = [fromIntegral i, w]
-commandToWord8 Enable = [4]
-commandToWord8 Disable = [5]
-commandToWord8 Set = [6]
+commandToWord8 (Byte i w) = [48+fromIntegral i, w]
+commandToWord8 Enable = [101]
+commandToWord8 Disable = [100]
+commandToWord8 Set = [115]
 
 commandsToWord8 :: [Command] -> [Word8]
 commandsToWord8 = concatMap commandToWord8
