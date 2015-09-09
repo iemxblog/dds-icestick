@@ -9,7 +9,7 @@ module communication_tb;
 	initial begin
 		$dumpfile("communication.vcd");
 		$dumpvars(0, communication_tb);
-		# 13636363 $finish;	// 13 636 363 ns = 6 periods of the 440 Hz signal
+		# 1100000000 $finish;	// 1 100 000 000 ns = 1.1s	
 	end
 
 	reg clk=0;
@@ -68,9 +68,6 @@ module communication_tb;
 		#`PERIOD received = 1;
 		#`PERIOD received = 0;
 
-		#`PERIOD10 rx_byte = `SET; // clean the error by sending a correct command
-		#`PERIOD received = 1;
-		#`PERIOD received = 0;
 	end
 
 	communication com(.clk(clk), .transmit(transmit), .tx_byte(tx_byte), .received(received), .rx_byte(rx_byte), .en(en), .m(m), .set(set), .error(error));

@@ -33,14 +33,16 @@ uart0(
 	.is_receiving(is_receiving)
 );
 
-assign led5 = is_transmitting;
-assign led4 = is_receiving;
-assign led3 = 0;
-assign led2=0;
+assign led5 = en;
+assign led4 = 0;
+assign led3 = error;
+assign led2 = is_transmitting;
+assign led1 = is_receiving;
 
 wire en;
 wire [31:0] m;
 wire set;
+wire error;
 
 communication com(
 	.clk(clk), 
@@ -51,7 +53,7 @@ communication com(
 	.en(en), 
 	.m(m), 
 	.set(set), 
-	.error(led1)
+	.error(error)
 );
 
 dds dds(

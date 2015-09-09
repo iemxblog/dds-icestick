@@ -16,6 +16,7 @@ module communication(
 reg [7:0] state=0;
 reg [7:0] command=0;
 reg [7:0] m0=0, m1=0, m2=0, m3=0;
+reg [23:0] count=0;
 
 assign m = {m3, m2, m1, m0};
 
@@ -88,8 +89,14 @@ begin
 			state=0;
 		end
 		8: begin // error state
-			state=0;
 			error=1;
+			count=count+1;
+			if (count>12000000) state=9;
+		end
+		9: begin
+			error=0;
+			count=0;
+			state=0;
 		end
 	endcase
 end
