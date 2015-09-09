@@ -101,6 +101,4 @@ begin
 	endcase
 end
 
-always @ (posedge received) error=0;
-
 endmodule
