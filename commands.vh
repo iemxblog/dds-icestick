@@ -2,6 +2,7 @@
 `define BYTE1 49 
 `define BYTE2 50 
 `define BYTE3 51
+`define BYTE4 52
 `define ENABLE 101
 `define DISABLE 100
 `define SET 115

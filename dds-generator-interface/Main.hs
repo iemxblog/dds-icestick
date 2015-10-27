@@ -62,11 +62,11 @@ frequency fClk twBits m =  fromIntegral (m * fClk) / 2^twBits
 -- | Generates a list of commands to send the tuning word.
 genCommandsTW :: RealFrac f => 	f 		-- ^ f : Desired frequenct
 				-> [Command]	-- ^ Resulting command
-genCommandsTW f = zipWith Byte [0..] (make4 (splitIntegral . tuningWord fClk twBits $ f))
+genCommandsTW f = zipWith Byte [0..] (make5 (splitIntegral . tuningWord fClk twBits $ f))
 	where 
-		make4 = take 4 . (++ repeat 0)
+		make5 = take 5 . (++ repeat 0)
 		fClk = 12000000
-		twBits = 32 :: Int
+		twBits = 40 :: Int
 
 sendCommand :: SerialPort -> Command -> IO ()
 sendCommand serial c = do

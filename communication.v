@@ -8,17 +8,17 @@ module communication(
 	input wire [7:0] rx_byte,
 
 	output reg en=0,
-	output wire [31:0] m,
+	output wire [39:0] m,
 	output reg set=0,
 	output reg error=0
 );
 
 reg [7:0] state=0;
 reg [7:0] command=0;
-reg [7:0] m0=0, m1=0, m2=0, m3=0;
+reg [7:0] m0=0, m1=0, m2=0, m3=0, m4=0;
 reg [23:0] count=0;
 
-assign m = {m3, m2, m1, m0};
+assign m = {m4, m3, m2, m1, m0};
 
 
 // state machine to receive data from the UART
@@ -44,6 +44,11 @@ begin
 							command = rx_byte;
 							state=1;
 						end
+					`BYTE4:	begin
+							command = rx_byte;
+							state=1;
+						end
+
 					`ENABLE: state = 2;
 					`DISABLE: state = 3;
 					`SET: state = 4;
@@ -59,6 +64,7 @@ begin
 					`BYTE1: m1 = rx_byte;
 					`BYTE2: m2 = rx_byte;
 					`BYTE3: m3 = rx_byte;
+					`BYTE4: m4 = rx_byte;
 				endcase
 				state=6;
 			end

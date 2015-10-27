@@ -21,11 +21,11 @@ module communication_tb;
 	reg received;
 	reg [7:0] rx_byte;	
 	wire en;
-	wire [31:0] m;
+	wire [39:0] m;
 	wire set;
 	wire error;
 
-	reg [31:0] m2=157482; // value of m to send
+	reg [39:0] m2=40315426; // value of m to send (for 440 Hz)
 
 	initial begin
 		#`PERIOD10 rx_byte = `BYTE0;
@@ -53,6 +53,13 @@ module communication_tb;
 		#`PERIOD received = 1;
 		#`PERIOD received = 0;		
 		#`PERIOD10 rx_byte = m2[31:24];
+		#`PERIOD received = 1;
+		#`PERIOD received = 0;
+
+		#`PERIOD10 rx_byte = `BYTE4;
+		#`PERIOD received = 1;
+		#`PERIOD received = 0;		
+		#`PERIOD10 rx_byte = m2[39:32];
 		#`PERIOD received = 1;
 		#`PERIOD received = 0;
 

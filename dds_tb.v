@@ -8,7 +8,7 @@ module dds_tb;
 
 	reg clk=0;
 	reg en = 0;
-	reg [31:0] m = 157482;	// tuning word for a frequency of 440 Hz (m = 2^32 * 440 Hz / 12 MHz)
+	reg [39:0] m = 40315426;	// tuning word for a frequency of 440 Hz (m = 2^40 * 440 Hz / 12 MHz)
 	reg set = 0;
 
 	always #41.666 clk = !clk;	// 41.666 ns = a half period of the 12MHz clock
@@ -17,7 +17,7 @@ module dds_tb;
 		# 4545454 en=1;
 		set=1;
 		# 1 set = 0;
-		# 2272727 m=314964; // tuning word for a frequency of 880Hz
+		# 2272727 m=80630853; // tuning word for a frequency of 880Hz
 		# 2272727 set = 1; 
 		# 1 set=0;
 	end

@@ -40,7 +40,7 @@ assign led2 = is_transmitting;
 assign led1 = is_receiving;
 
 wire en;
-wire [31:0] m;
+wire [39:0] m;
 wire set;
 wire error;
 
