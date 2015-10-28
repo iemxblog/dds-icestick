@@ -104,6 +104,6 @@ loop serial = do
 main :: IO ()
 main = do
 	putStrLn "Opening serial port..."
-	withSerial "/dev/ttyACM0" defaultSerialSettings { commSpeed = CS115200 } loop
+	withSerial "/dev/ttyUSB1" defaultSerialSettings { commSpeed = CS9600 } loop
 	putStrLn "Serial port closed."
 
