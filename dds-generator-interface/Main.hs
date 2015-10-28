@@ -18,6 +18,7 @@ import Control.Monad
 import System.IO
 import System.Hardware.Serialport
 import qualified Data.ByteString as B
+import Control.Concurrent (threadDelay)
 
 data Command = Byte Int Word8 | Enable | Disable | Set deriving (Eq, Show)
 
@@ -80,24 +81,49 @@ sendCommand serial c = do
 
 sendCommands :: SerialPort -> [Command] -> IO ()
 sendCommands serial cs = (sequence_ . map (sendCommand serial)) cs >> putStrLn ""
-		
+
+setFrequency :: RealFrac f => f -> SerialPort -> IO ()
+setFrequency f serial = sendCommands serial $ (genCommandsTW f) ++ [Set]
+
+enable :: SerialPort -> IO ()
+enable serial = sendCommands serial [Enable] >> putStrLn "Generator enabled."
+
+disable :: SerialPort -> IO ()
+disable serial = sendCommands serial [Disable] >> putStrLn "Generator disabled."
+
 --loop :: SerialPort -> IO ()
 loop serial = do
 	putStr "> "
 	hFlush stdout
 	s <- getLine
 	case s of
-		"enable" -> sendCommands serial [Enable] >> loop serial
-		"disable" -> sendCommands serial [Disable] >> loop serial
-		"set" -> sendCommands serial [Set] >> loop serial
+		"enable" -> enable serial >> loop serial
+		"disable" -> disable serial >> loop serial
 		"f" -> do
 				putStr "f="
 				hFlush stdout
-				sf <- getLine
-				let f = read sf 
-				sendCommands serial $ genCommandsTW f
+				f <- liftM read getLine
+				setFrequency f serial
 				loop serial
-		"help" -> putStrLn "Available commands : enable, disable, set, f, help, exit" >> loop serial
+		"sweep" -> do
+				putStr "start frequency (in Hz) = "
+				hFlush stdout
+				sf <- liftM read getLine
+				putStr "end frequency (in Hz) = "
+				hFlush stdout
+				ef <- liftM read getLine
+				putStr "step (in Hz) = "
+				hFlush stdout
+				step <- liftM read getLine
+				putStr "step duration (in s) = "
+				hFlush stdout
+				sd <- liftM read getLine
+				enable serial
+				sequence_ [putStrLn ("f=" ++ show f ++ "hz") >> setFrequency f serial >> threadDelay (sd*1000000) | f <- [sf,(sf+step)..ef]]
+				disable serial
+				loop serial
+				
+		"help" -> putStrLn "Available commands : enable, disable, f, sweep, help, exit" >> loop serial
 		"exit" -> return ()
 		_ -> putStrLn "Invalid command" >> loop serial
 
