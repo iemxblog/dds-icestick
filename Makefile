@@ -1,3 +1,5 @@
+### Simulation ###
+
 all: dds.vcd communication.vcd generator
 
 dds: dds.v sine_lut.v dds_tb.v
@@ -21,5 +23,20 @@ sim_dds: dds.vcd
 sim_com: communication.vcd
 	gtkwave communication.vcd
 
+### Icestorm toolchain ###
+
+generator.blif: generator.v
+	yosys -p "read_verilog generator.v dds.v communication.v uart.v sine_lut.v; synth_ice40 -blif generator.blif"
+
+generator.txt: generator.blif
+	arachne-pnr -d 1k -p generator.pcf -o generator.txt generator.blif
+
+generator.bin: generator.txt
+	icepack generator.txt generator.bin
+
+prog:	generator.bin
+	iceprog generator.bin
+
 clean:
-	rm -f dds communication *.vcd
+	rm -f dds communication *.vcd                       # Delete simulation files
+	rm -f generator.blif generator.txt generator.bin    # Delete Icestorm toolchain files

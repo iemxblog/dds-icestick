@@ -1,0 +1,17 @@
+set_io clk 21
+set_io led1 116
+set_io led5 115
+set_io out[2] 60
+set_io out[6] 45
+set_io rx 9
+set_io led4 96
+set_io out[1] 61
+set_io out[5] 47
+set_io led3 97
+set_io out[0] 62
+set_io out[4] 48
+set_io led2 117
+set_io out[3] 56
+set_io out[7] 44
+set_io tx 8
+

@@ -3,3 +3,6 @@ dds
 *.swp
 communication
 generator
+generator.bin
+generator.blif
+generator.txt
